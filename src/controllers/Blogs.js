@@ -1,4 +1,5 @@
 const { insert, modify, list, listById, remove } = require("../services/Blogs");
+const { getCommentsForBlog, removeCommentsForBlogId } = require("../services/Comments");
 const httpStatus = require("http-status");
 
 const index = (req, res) => {
@@ -50,6 +51,18 @@ const deleteBlog = (req, res) => {
         })
     }
 
+    //  remove comments for blog
+    // TODOS: write leaner implementation
+    getCommentsForBlog(req.params).then( (existingComments) => {
+        if (existingComments) {
+            removeCommentsForBlogId(req.params).then( (removedComments) => {
+                console.log(`${removedComments.deletedCount} comments are removed`)
+            }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message})) 
+        }
+        console.log(`Comments for blog id: ${req.params.id} are safely removod.`)
+    }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message})) 
+  
+    // remove blog
     remove(req.params?.id).then( (deletedBlog) => {
         console.log("deleted blog >> ", deletedBlog);
         if(!deletedBlog){
@@ -64,6 +77,7 @@ const deleteBlog = (req, res) => {
     .catch( e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
         error: e.message
     }) )
+    
 }
 
 module.exports = {
