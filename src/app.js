@@ -2,6 +2,7 @@ const express = require("express");
 const helmet = require("helmet");
 const config = require("./config");
 const loaders = require("./loaders");
+const { BlogsRoutes } = require("./api-routes");
 
 config();
 loaders();
@@ -15,4 +16,7 @@ app.use(helmet());
 
 app.listen(process.env.PORT, () => {
     console.log(`Server is running on port ${process.env.PORT}...`);
+    app.use("/blogs", BlogsRoutes);
+    // app.use("/comments", CommentRoutes);
+    // app.use("/users", UserRoutes);
 })

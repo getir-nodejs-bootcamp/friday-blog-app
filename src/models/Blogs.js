@@ -2,7 +2,8 @@ const Mongoose = require("mongoose");
 
 const BlogSchema = new Mongoose.Schema({
     text: String,
-    author: String,
+    title: String, 
+    author: String, // bilgisi user nickname ile alınacak
     category: String,
     // user_id: {
     //     type: Mongoose.Types.ObjectId,
@@ -14,6 +15,6 @@ const BlogSchema = new Mongoose.Schema({
 });
 
 
-const Blog = Mongoose.model("project", BlogSchema);
+const Blog = Mongoose.model("blog", BlogSchema);
 
 module.exports = Blog;
