@@ -3,12 +3,12 @@ const Mongoose = require("mongoose");
 const BlogSchema = new Mongoose.Schema({
     text: String,
     title: String, 
-    author: String, // bilgisi user nickname ile alınacak
+    author: String, 
     category: String,
-    // user_id: {
-    //     type: Mongoose.Types.ObjectId,
-    //     ref: "user"
-    // },
+    user_id: {
+        type: Mongoose.Types.ObjectId,
+        ref: "user"
+    },
 }, 
 {
     timestamps: true, versionKey: false
