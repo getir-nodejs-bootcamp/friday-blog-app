@@ -5,10 +5,10 @@ const CommentSchema = new Mongoose.Schema({
         type: Mongoose.Types.ObjectId,
         ref: "blog"
     },
-    // user_id: {
-    // type: Mongoose.Types.ObjectId,
-    //      ref: "user"
-    // },
+    user_id: {
+    type: Mongoose.Types.ObjectId,
+         ref: "user"
+    },
     text: String,
     author: String,
     category: String,

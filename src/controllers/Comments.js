@@ -21,7 +21,7 @@ const getComment = (req, res) => {
 
 
 const createComment = (req, res) => {
-    // req.body.user_id = req.user;
+    req.body.user_id = req.userID;
     insert(req.body).then(response => {
         res.status(httpStatus.CREATED).send(response);
     }).catch(e => {

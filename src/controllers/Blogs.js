@@ -22,7 +22,8 @@ const getBlog = (req, res) => {
 
 
 const createBlog = (req, res) => {
-    // req.body.user_id = req.user;
+    console.log(req.userID)
+    req.body.user_id = req.userID;
     insert(req.body).then(response => {
         res.status(httpStatus.CREATED).send(response);
     }).catch(e => {

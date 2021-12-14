@@ -4,7 +4,7 @@
   "description": "Backend for a blog application that uses MongoDB, NodeJS and ExpressJS",
   "main": "index.js",
   "scripts": {
-    "start": "node app.js"
+    "start": "node src/app.js"
   },
   "repository": {
     "type": "git",
@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/getir-nodejs-bootcamp/friday-blog-app#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
