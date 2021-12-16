@@ -24,7 +24,6 @@ const modify = (data, id) => {
 }
 
 const remove = (id) => {
-    console.log("hit")
     return Blog.findByIdAndDelete(id);
 }
 

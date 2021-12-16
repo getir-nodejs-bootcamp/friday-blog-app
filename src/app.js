@@ -3,7 +3,7 @@ const helmet = require("helmet");
 const config = require("./config");
 const loaders = require("./loaders");
 const events = require("./scripts/events");
-const { BlogsRoutes, CommentsRoutes, UsersRoutes } = require("./api-routes");
+const { BlogsRoutes, CommentsRoutes, UsersRoutes, ReadinglistsRoutes } = require("./api-routes");
 
 config();
 loaders();
@@ -21,4 +21,5 @@ app.listen(process.env.EXPRESS_APP_PORT, () => {
     app.use("/blogs", BlogsRoutes);
     app.use("/comments", CommentsRoutes);
     app.use("/users", UsersRoutes);
+    app.use("/readinglists", ReadinglistsRoutes)
 })

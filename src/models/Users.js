@@ -15,6 +15,14 @@ const UserSchema = new Mongoose.Schema({
             default: true
         }
     },
+    readinglists: [
+        {
+            readinglist_id: {
+                type: Mongoose.Types.ObjectId,
+                ref: "readinglist"
+            }   
+        }
+    ]
 }, {timestamps: true, versionKey: false})
 
 module.exports = Mongoose.model("user", UserSchema);
