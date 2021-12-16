@@ -7,11 +7,14 @@ const { generateAccessToken } = require("../scripts/utils/tokenUtil");
 
 const create = (req, res) => {
     req.body.password = passwordToHash(req.body.password);
+
     insert(req.body).then(response => {
         res.status(httpStatus.CREATED).send(response);
     }).catch((e) => {
-        res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e);
+        // checks for duplicate key errors for email too
+        res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: e.message});
     })
+    
 };
 
 const update = (req, res) => {
@@ -26,7 +29,7 @@ const update = (req, res) => {
 }
 
 const login = (req, res) => {
-    console.log("hit")
+
     const { email } = req.body
     loginUser({email: email})
     .then( user => {
