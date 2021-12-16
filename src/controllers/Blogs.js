@@ -1,4 +1,4 @@
-const { insert, modify, list, listById, remove, incrementLike, decrementLike } = require("../services/Blogs");
+const { insert, modify, list, listById, listPopularBlogs, listPopularBlogsByCategory, listRecommendedBlogsForUser, listBlogsByGivenWords, remove, incrementLike, decrementLike } = require("../services/Blogs");
 const { getCommentsForBlog, removeCommentsForBlogId } = require("../services/Comments");
 const httpStatus = require("http-status");
 
@@ -16,6 +16,46 @@ const getBlog = (req, res) => {
         })
     }
     listById(req.params?.id).then(response => {
+        res.status(httpStatus.OK).send(response);
+    }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message}))
+}
+
+const getPopularBlogs = (req, res) => {
+
+    listPopularBlogs().then(response => {
+        res.status(httpStatus.OK).send(response);
+    }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message}))
+}
+
+const getPopularBlogsByCategory = (req, res) => {
+
+    if (!req.params?.category) {
+        return res.status(httpStatus.BAD_REQUEST).send({
+            message: "Category is missing."
+        })
+    }
+    listPopularBlogsByCategory(req.params.category).then(response => {
+        res.status(httpStatus.OK).send(response);
+    }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message}))
+}
+
+const getRecommendedBlogsForUser = (req, res) => {
+
+    listRecommendedBlogsForUser(req.userInfo.preferredHashtags).then(response => {
+        res.status(httpStatus.OK).send(response);
+    }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message}))
+}
+
+// this query performs a search operation for each text field in blog collection
+const searchBlogsByKeywords = (req, res) => {
+
+    if (!req.body?.keywords) {
+        return res.status(httpStatus.BAD_REQUEST).send({
+            message: "Keywords are missing. Please write keywords with a space between such as 'coffee newyork'"
+        })
+    }
+
+    listBlogsByGivenWords(req.body.keywords).then(response => {
         res.status(httpStatus.OK).send(response);
     }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message}))
 }
@@ -166,6 +206,10 @@ const sendLikeFlag = (req, res) => {
 module.exports = {
     index,
     getBlog,
+    getPopularBlogs,
+    getPopularBlogsByCategory,
+    getRecommendedBlogsForUser,
+    searchBlogsByKeywords,
     createBlog,
     updateBlog,
     deleteBlog,
