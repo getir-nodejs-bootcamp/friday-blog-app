@@ -1,4 +1,5 @@
 const { insert, modify, list, listById, remove } = require("../services/Comments");
+const { listById: getBlogById } = require("../services/Blogs");
 const httpStatus = require("http-status");
 
 const index = (req, res) => {
@@ -28,12 +29,20 @@ const createComment = (req, res) => {
     // add user_id and full_name to request body JSON
     req.body.user_id = _id;
     req.body.author = full_name
-    
-    insert(req.body).then(response => {
-        res.status(httpStatus.CREATED).send(response);
+
+    // check if blog exists in the db
+    getBlogById(req.body.blog_id).then(blog => {
+        if(!blog)
+            return res.status(httpStatus.BAD_REQUEST).send({error: "Blog is not found"});
+        insert(req.body).then(response => {
+            res.status(httpStatus.CREATED).send(response);
+        }).catch(e => {
+            res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: e.message});
+        })
     }).catch(e => {
         res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: e.message});
     })
+    
 };
 
 const updateComment = (req, res) => {
