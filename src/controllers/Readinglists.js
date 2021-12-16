@@ -71,6 +71,86 @@ const deleteReadinglist = (req, res) => {
     }) )
 }
 
+const addBlogToReadinglist = (req, res) => {
+
+    // check if reading exists at parameters
+    if(!req.params?.id) {
+        return res.status(httpStatus.BAD_REQUEST).send({
+            message: "Reading List ID is missing."
+        })
+    }
+    // check if blog exists at parameters
+    if(!req.params?.blogId) {
+        return res.status(httpStatus.BAD_REQUEST).send({
+            message: "Blog ID is missing."
+        })
+    }
+
+    // find reading list
+    // check if current user added blog to this reading list before
+    // if not; push blog to blogs array in readinglist model
+    // send to db
+
+    listById(req.params?.id).then(readinglist => {
+        if (!readinglist) 
+            return res.status(httpStatus.NOT_FOUND).send({message: "Reading list not found"});
+
+        const foundBlog = readinglist.blogs.find( elem =>  elem.blog_id.toString() === req.params.blogId )
+        if (foundBlog)
+             return res.status(httpStatus.OK).send({message: "Current user has already added this blog to playlist"});
+        
+        // create object to add array
+        const blogToBeAdded = {
+            blog_id: req.params?.blogId,
+        }
+
+        readinglist.blogs.push(blogToBeAdded);
+
+        readinglist.save().then( (updatedDoc) => {
+            res.status(httpStatus.OK).send(updatedDoc);
+        }).catch( (e) => {res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e.message)});
+    }).catch( (e) => {res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e.message)});
+
+}
+
+const removeBlogFromReadingList = (req, res) => {
+
+    // check if reading exists at parameters
+    if(!req.params?.id) {
+        return res.status(httpStatus.BAD_REQUEST).send({
+            message: "Reading List ID is missing."
+        })
+    }
+    // check if blog exists at parameters
+    if(!req.params?.blogId) {
+        return res.status(httpStatus.BAD_REQUEST).send({
+            message: "Blog ID is missing."
+        })
+    }
+
+    // find reading list
+    // check if current user added blog to this reading list before
+    // if not; send reading list not found
+    // if exists; filter array therefore; blog is no longer being held in the array
+    // save array, send to db
+
+    listById(req.params?.id).then(readinglist => {
+        if (!readinglist) 
+            return res.status(httpStatus.NOT_FOUND).send({message: "Reading list not found"});
+
+        const foundBlog = readinglist.blogs.find( elem =>  elem.blog_id.toString() === req.params.blogId )
+        if (!foundBlog)
+             return res.status(httpStatus.OK).send({message: "Current user did not add this blog to playlist before"});
+        
+        // create object to add array
+        readinglist.blogs = readinglist.blogs.filter(elem =>  elem.blog_id.toString() !== req.params.blogId)
+
+        readinglist.save().then( (updatedDoc) => {
+            res.status(httpStatus.OK).send(updatedDoc);
+        }).catch( (e) => {res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e)});
+    }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message}))
+    
+}
 
 module.exports = {
     index,
@@ -78,4 +158,6 @@ module.exports = {
     createReadinglist,
     updateReadinglist,
     deleteReadinglist,
+    addBlogToReadinglist,
+    removeBlogFromReadingList
 }

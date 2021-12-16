@@ -27,6 +27,13 @@ const remove = (id) => {
     return Readinglist.findByIdAndDelete(id);
 }
 
+const addBlog = (id) => {
+    return Readinglist.findByIdAndDelete(id);
+}
+
+const removeBlog = (id) => {
+    return Readinglist.findByIdAndDelete(id);
+}
 
 module.exports = {
     insert,
