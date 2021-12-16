@@ -24,10 +24,11 @@ const getBlog = (req, res) => {
 const createBlog = (req, res) => {
 
     // get user info from auth middleware
-    const {userID} = req.userInfo;
+    const {userID, full_name} = req.userInfo;
 
-    // add user id to request body JSON
+    // add user_id and full_name to request body JSON
     req.body.user_id = userID;
+    req.body.author = full_name
 
     // insert body so we know which user has posted the blog
     insert(req.body).then(response => {
