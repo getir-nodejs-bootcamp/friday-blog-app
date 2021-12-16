@@ -35,6 +35,10 @@ const remove = (id) => {
     return Comment.findByIdAndDelete(id);
 }
 
+const removeCommentsForUser = (userID) => {
+    return Comment.deleteMany({user_id: userID});
+}
+
 module.exports = {
     insert,
     list,
@@ -42,5 +46,6 @@ module.exports = {
     modify,
     remove,
     removeCommentsForBlogId,
+    removeCommentsForUser,
     getCommentsForBlog
 }
