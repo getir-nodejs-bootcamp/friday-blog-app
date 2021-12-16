@@ -1,4 +1,4 @@
-const Joi = require("joi");
+const Joi = require('joi');
 
 const createValidation = Joi.object({
     text: Joi.string().required().min(5),
@@ -17,16 +17,16 @@ const updateValidation = Joi.object({
 });
 
 const sendLikeFlagValidation = Joi.object({
-    liked: Joi.boolean()
+    liked: Joi.boolean(),
 });
 
 const searchBlogsByKeywordsValidation = Joi.object({
-    keywords: Joi.string().min(1)
-})
+    keywords: Joi.string().min(1),
+});
 
 module.exports = {
     createValidation,
     updateValidation,
     sendLikeFlagValidation,
-    searchBlogsByKeywordsValidation
-}
+    searchBlogsByKeywordsValidation,
+};

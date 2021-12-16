@@ -1,4 +1,4 @@
-const Joi = require("joi");
+const Joi = require('joi');
 
 const createValidation = Joi.object({
     full_name: Joi.string().required().min(3),
@@ -9,15 +9,15 @@ const createValidation = Joi.object({
 
 const loginValidation = Joi.object({
     password: Joi.string().required().min(8),
-    email: Joi.string().email().required().min(8)
+    email: Joi.string().email().required().min(8),
 });
 
 const resetPasswordValidation = Joi.object({
-    email: Joi.string().email().required().min(8)
+    email: Joi.string().email().required().min(8),
 });
 
 const changePasswordValidation = Joi.object({
-    password: Joi.string().required().min(8)
+    password: Joi.string().required().min(8),
 });
 
 const updateValidation = Joi.object({
@@ -25,9 +25,9 @@ const updateValidation = Joi.object({
     email: Joi.string().email().min(8),
     preferences: Joi.object().keys({
         sendMail: Joi.boolean(),
-        sendSMS: Joi.boolean()
+        sendSMS: Joi.boolean(),
     }),
-    preferredHashtags: Joi.array()
+    preferredHashtags: Joi.array(),
 });
 
 module.exports = {
@@ -35,5 +35,5 @@ module.exports = {
     loginValidation,
     resetPasswordValidation,
     changePasswordValidation,
-    updateValidation
-}
+    updateValidation,
+};
