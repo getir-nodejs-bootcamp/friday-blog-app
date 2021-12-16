@@ -1,7 +1,7 @@
 const httpStatus = require("http-status");
 
 const validate = (schema) => (req, res, next) => {
-    /*
+    
     const { value, error} = schema.validate(req.body);
     if (error){
         // error.details = [{message: ""}, {message: ""}]
@@ -13,8 +13,7 @@ const validate = (schema) => (req, res, next) => {
 
     Object.assign(req, value);
     return next();
-    */
-   return next();
+    
 }
 
 module.exports = validate;
