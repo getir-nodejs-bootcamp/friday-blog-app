@@ -72,31 +72,6 @@ const deleteComment = (req, res) => {
         error: e.message
     }) )
 }
-/*
-const deleteCommentForBlog = (req, res) => {
-    if(!req.params?.id) {
-        return res.status(httpStatus.BAD_REQUEST).send({
-            message: "Blog ID is missing."
-        })
-    }
-
-    removeByBlogId(req.params?.id).then( (deletedComments) => {
-        console.log("deleted Comments >> ", deletedComments);
-        if(!deletedComments){
-            return res.status(httpStatus.NOT_FOUND).send({
-                message: "Comments cannot be found."
-            })
-        }
-        res.status(httpStatus.OK).send({
-            message: "Comments are removed."
-        });
-    })
-    .catch( e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
-        error: e.message
-    }) )
-*/
-
-
 
 module.exports = {
     index,

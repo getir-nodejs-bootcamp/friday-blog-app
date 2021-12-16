@@ -64,12 +64,13 @@ const searchBlogsByKeywords = (req, res) => {
 const createBlog = (req, res) => {
 
     // get user info from auth middleware
-    const {userID, full_name} = req.userInfo;
+    const {_id, full_name} = req.userInfo;
 
     // add user_id and full_name to request body JSON
-    req.body.user_id = userID;
+    req.body.user_id = _id;
     req.body.author = full_name
 
+    console.log(req.body)
     // insert body so we know which user has posted the blog
     insert(req.body).then(response => {
         res.status(httpStatus.CREATED).send(response);
