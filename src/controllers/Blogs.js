@@ -1,5 +1,6 @@
 const { insert, modify, list, listById, listPopularBlogs, listPopularBlogsByCategory, listRecommendedBlogsForUser, listBlogsByGivenWords, remove, incrementLike, decrementLike } = require("../services/Blogs");
 const { getCommentsForBlog, removeCommentsForBlogId } = require("../services/Comments");
+const { listReadingListsByBlogId } = require("../services/Readinglists");
 const httpStatus = require("http-status");
 
 const index = (req, res) => {
@@ -107,8 +108,26 @@ const deleteBlog = (req, res) => {
                 console.log(`${removedComments.deletedCount} comments are removed`)
             }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message})) 
         }
-        console.log(`Comments for blog id: ${req.params.id} are safely removod.`)
+        console.log(`Comments for blog id: ${req.params.id} are safely removed.`)
     }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message})) 
+
+
+
+    // remove blogs from reading lists
+    listReadingListsByBlogId(req.params.id).then(readingLists => {
+        console.log(readingLists)
+        // loop through each reading list
+        readingLists.forEach(list => {
+            // filter each reading list so that deleted blog does not exists in blogs array
+            list.blogs= list.blogs.filter((elem) => elem.blog_id?.toString() !== req.params.id)
+            // save to db
+            list.save().then(s => {
+                console.log(s)
+            })
+        })
+    }).catch( (e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+        error: e.message
+    }) )
   
     // remove blog
     remove(req.params?.id).then( (deletedBlog) => {
