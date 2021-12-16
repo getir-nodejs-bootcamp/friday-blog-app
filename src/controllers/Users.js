@@ -70,8 +70,9 @@ const resetPassword = (req, res) => {
 const changePassword = (req, res) => {
 
     req.body.password = passwordToHash(req.body.password);
-
-    modify({_id: req.userID }, req.body).then(updatedUser => {
+    
+    // get user info from auth middleware
+    modify({_id: req.userInfo._id }, req.body).then(updatedUser => {
         res.status(httpStatus.OK).send(updatedUser);
     }).catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: e.message}))
 }

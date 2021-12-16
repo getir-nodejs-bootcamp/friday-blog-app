@@ -22,8 +22,14 @@ const getBlog = (req, res) => {
 
 
 const createBlog = (req, res) => {
-    console.log(req.userID)
-    req.body.user_id = req.userID;
+
+    // get user info from auth middleware
+    const {userID} = req.userInfo;
+
+    // add user id to request body JSON
+    req.body.user_id = userID;
+
+    // insert body so we know which user has posted the blog
     insert(req.body).then(response => {
         res.status(httpStatus.CREATED).send(response);
     }).catch(e => {
