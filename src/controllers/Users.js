@@ -21,6 +21,8 @@ const update = (req, res) => {
         res.status(httpStatus.OK).send(updatedUser);
     }).catch((e) => res.status().send({error: e.message}))
 
+    // TODOS: user full_name degistirince bloglardaki ve commentlerdeki ismi de değişmeli
+
 }
 
 const login = (req, res) => {
@@ -82,7 +84,11 @@ const changePassword = (req, res) => {
     
     // get user info from auth middleware
     modify({_id: req.userInfo._id }, req.body).then(updatedUser => {
+
+        if (!updatedUser) return res.status(httpStatus.NOT_FOUND).send({error: "user password has not been changed."})
+
         res.status(httpStatus.OK).send(updatedUser);
+
     }).catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send({error: e.message}))
 }
 
