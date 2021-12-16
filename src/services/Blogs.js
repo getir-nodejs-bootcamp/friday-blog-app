@@ -113,6 +113,11 @@ const listBlogsByGivenWords = (words) => {
     
 }
 
+const listBlogsLikedByCurrentUser = (userID) => {
+    const query = { "likedByUsers": { $elemMatch: {user_id: userID} } }
+    return Blog.find( query )
+}
+
 const insert = (blogDocument) => {
     const blog = new Blog(blogDocument);
     return blog.save();
@@ -124,6 +129,10 @@ const modify = (data, id) => {
 
 const remove = (id) => {
     return Blog.findByIdAndDelete(id);
+}
+
+const removeBlogsForUser = (userID) => {
+    return Blog.deleteMany({user_id: userID} );
 }
 
 const incrementLike = (id) => {
@@ -143,8 +152,10 @@ module.exports = {
     listPopularBlogsByCategory,
     listRecommendedBlogsForUser,
     listBlogsByGivenWords,
+    listBlogsLikedByCurrentUser,
     modify,
     remove,
+    removeBlogsForUser,
     incrementLike,
-    decrementLike
+    decrementLike,
 }
