@@ -23,7 +23,7 @@ const getComment = (req, res) => {
 const createComment = (req, res) => {
 
     // get user info from auth middleware
-    const {_id} = req.userInfo;
+    const {_id, full_name} = req.userInfo;
 
     // add user_id and full_name to request body JSON
     req.body.user_id = _id;
