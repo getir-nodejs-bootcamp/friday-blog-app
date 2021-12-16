@@ -20,8 +20,13 @@ const sendLikeFlagValidation = Joi.object({
     liked: Joi.boolean()
 });
 
+const searchBlogsByKeywordsValidation = Joi.object({
+    keywords: Joi.string().min(1)
+})
+
 module.exports = {
     createValidation,
     updateValidation,
-    sendLikeFlagValidation
+    sendLikeFlagValidation,
+    searchBlogsByKeywordsValidation
 }
