@@ -10,7 +10,7 @@ const BlogSchema = new Mongoose.Schema({
         ref: "user"
     },
     numLikes: Number,
-    // published: Boolean,
+    published: Boolean,
     likedByUsers: [
         {
             user_id: {

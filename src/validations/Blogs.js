@@ -8,9 +8,9 @@ const createValidation = Joi.object({
 });
 
 const updateValidation = Joi.object({
-    text: Joi.string().required().min(5),
-    title: Joi.string().required(),
-    category: Joi.string(),
+    text: Joi.string().min(5),
+    title: Joi.string().min(1),
+    category: Joi.string().min(1),
     published: Joi.boolean()
 });
 
