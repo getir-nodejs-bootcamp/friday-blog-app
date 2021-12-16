@@ -22,6 +22,9 @@ const UserSchema = new Mongoose.Schema({
                 ref: "readinglist"
             }   
         }
+    ],
+    preferredHashtags: [
+        String
     ]
 }, {timestamps: true, versionKey: false})
 
