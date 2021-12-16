@@ -5,18 +5,11 @@ const insert = (data) => {
     return user.save();
 }
 
-const list = () => {
-    return User.find({})
+const list = (where) => {
+    return User.find(where || {})
 }
 
 const loginUser = (loginData) => {
-    /*
-    const userWithEmail = await User.findOne({ where: { email } }).catch(
-        (err) => {
-          console.log("Error: ", err);
-        }
-      );
-    */
     return User.findOne(loginData)
 }
 
