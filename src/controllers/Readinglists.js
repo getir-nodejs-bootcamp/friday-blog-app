@@ -1,4 +1,5 @@
 const { insert, modify, list, listById, remove } = require("../services/Readinglists");
+const { listById: getBlogById } = require("../services/Blogs");
 const httpStatus = require("http-status");
 
 const index = (req, res) => {
@@ -88,7 +89,8 @@ const addBlogToReadinglist = (req, res) => {
 
     // find reading list
     // check if current user added blog to this reading list before
-    // if not; push blog to blogs array in readinglist model
+    // if not; check for whether blog exists in the db or not
+    // push blog to blogs array in readinglist model
     // send to db
 
     listById(req.params?.id).then(readinglist => {
@@ -96,20 +98,31 @@ const addBlogToReadinglist = (req, res) => {
             return res.status(httpStatus.NOT_FOUND).send({message: "Reading list not found"});
 
         const foundBlog = readinglist.blogs.find( elem =>  elem.blog_id.toString() === req.params.blogId )
+        
         if (foundBlog)
              return res.status(httpStatus.OK).send({message: "Current user has already added this blog to playlist"});
         
-        // create object to add array
-        const blogToBeAdded = {
-            blog_id: req.params?.blogId,
-        }
+        // check if blog exists in the database
+        getBlogById(req.params.blogId).then( (blog) => {
+            if (!blog)
+                return res.status(httpStatus.NOT_FOUND).send({message: "Blog does not exists"});
 
-        readinglist.blogs.push(blogToBeAdded);
+            // then it is safe to add blog to reading list
+            // create object to add array
+            const blogToBeAdded = {
+                blog_id: req.params?.blogId,
+            }
 
-        readinglist.save().then( (updatedDoc) => {
-            res.status(httpStatus.OK).send(updatedDoc);
+            readinglist.blogs.push(blogToBeAdded);
+
+            readinglist.save().then( (updatedDoc) => {
+                res.status(httpStatus.OK).send(updatedDoc);
+            }).catch( (e) => {res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e.message)});
         }).catch( (e) => {res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e.message)});
-    }).catch( (e) => {res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e.message)});
+
+
+        })
+    
 
 }
 
