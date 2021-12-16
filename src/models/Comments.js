@@ -11,7 +11,6 @@ const CommentSchema = new Mongoose.Schema({
     },
     text: String,
     author: String,
-    category: String,
 }, 
 {
     timestamps: true, versionKey: false
