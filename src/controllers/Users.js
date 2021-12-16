@@ -2,6 +2,9 @@ const httpStatus = require("http-status");
 const uuid = require("uuid");
 const eventEmitter = require("../scripts/events/eventEmitter");
 const { insert, list, loginUser, modify, remove } = require("../services/Users");
+const { removeBlogsForUser, listBlogsLikedByCurrentUser } = require("../services/Blogs");
+const { removeCommentsForUser } = require("../services/Comments");
+const { removeReadingListsForUser } = require("../services/Readinglists");
 const { passwordToHash, comparePassword } = require("../scripts/utils/passwordUtil");
 const { generateAccessToken } = require("../scripts/utils/tokenUtil");
 
@@ -101,11 +104,50 @@ const deleteUser = (req, res) => {
             message: "ID Info is missing"
         })
     }
-    remove(req.params?.id).then( (deletedItem) => {
+    // get user id
+    const { _id } = req.userInfo
+    // remove blogs written by user
+    removeBlogsForUser(_id).then(removedBlogs => {
+        console.log(removedBlogs)
+    }).catch( (e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+        error: e.message
+    }) )
+
+    // remove comments posted by user
+    removeCommentsForUser(_id).then(removedComments => {
+        console.log(removedComments)
+    }).catch( (e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+        error: e.message
+    }) )
+
+    // remove reading lists created by user
+    removeReadingListsForUser(_id).then(removedReadingLists => {
+        console.log(removedReadingLists)
+    }).catch( (e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+        error: e.message
+    }) )
+
+    // find blogs where blogs.likedByUsers array contains current user id
+
+    listBlogsLikedByCurrentUser(_id).then(blogs => {
+        // loop through each blog
+        blogs.forEach(blog => {
+            // filter each blog so that deleted user does not exists in likedByUsers array
+            blog.likedByUsers= blog.likedByUsers.filter((elem) => elem.user_id?.toString() !== _id)
+            // save to db
+            blog.save()
+            
+        })
+    }).catch( (e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send({
+        error: e.message
+    }) )
+
+    // it is safe to remove user now
+    remove(req.params?.id).then( (deletedUser) => {
   
-        if(!deletedItem){
+        if(!deletedUser){
             return res.status(httpStatus.NOT_FOUND).send({
-                message: "Record does not exists"
+                message: "User is not being removed"
             })
         }
         res.status(httpStatus.OK).send({
