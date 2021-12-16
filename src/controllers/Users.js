@@ -14,6 +14,15 @@ const create = (req, res) => {
     })
 };
 
+const update = (req, res) => {
+
+     // get user info from auth middleware
+    modify({_id: req.userInfo?._id}, req.body).then(updatedUser => {
+        res.status(httpStatus.OK).send(updatedUser);
+    }).catch((e) => res.status().send({error: e.message}))
+
+}
+
 const login = (req, res) => {
     console.log("hit")
     const { email } = req.body
@@ -102,6 +111,7 @@ const deleteUser = (req, res) => {
 
 module.exports = {
     create,
+    update,
     index,
     login,
     changePassword,
