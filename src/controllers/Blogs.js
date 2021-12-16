@@ -1,4 +1,4 @@
-const { insert, modify, list, listById, remove } = require("../services/Blogs");
+const { insert, modify, list, listById, remove, incrementLike, decrementLike } = require("../services/Blogs");
 const { getCommentsForBlog, removeCommentsForBlogId } = require("../services/Comments");
 const httpStatus = require("http-status");
 
@@ -58,7 +58,6 @@ const deleteBlog = (req, res) => {
             message: "Blog ID is missing."
         })
     }
-
     //  remove comments for blog
     // TODOS: write leaner implementation
     getCommentsForBlog(req.params).then( (existingComments) => {
@@ -88,10 +87,87 @@ const deleteBlog = (req, res) => {
     
 }
 
+const sendLikeFlag = (req, res) => {
+
+    // get user info from auth middleware
+    // get like flag from request body
+    const { liked } = req.body;
+    const { _id } = req.userInfo;
+
+    // check if blog exists
+    if(!req.params?.id) {
+        return res.status(httpStatus.BAD_REQUEST).send({
+            message: "Blog ID is missing."
+        })
+    }
+
+    //TODOS: refactoring into single units required !!!
+
+    if (liked) {
+        // find blog
+        listById(req.params?.id).then(blog => {
+            if (!blog) 
+                return res.status(httpStatus.NOT_FOUND).send({message: "Blog not found"});
+
+            // check if user liked this blog before
+            const isUserLikedThisBlogBefore = blog.likedByUsers.find( (elem) => elem.user_id?.toString() === _id)
+            if (isUserLikedThisBlogBefore)
+                return res.status(httpStatus.OK).send({message: "Current user has already liked this blog"});
+            
+            // create object to add array
+            const likedByUser = {
+                // get user info from auth middleware
+                user_id: _id,
+            }
+            // add blog model likedByUsers field that holds array of objects to current user who likes the blog now
+            blog.likedByUsers.push(likedByUser);
+            // save document
+            blog.save().then( (updatedDoc) => {
+                // increment num of likes
+                incrementLike(updatedDoc._id).then(updatedBlog => {
+                    res.status(httpStatus.OK).send(updatedBlog);
+                }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(
+                {error: e.message}
+            ))
+            }).catch( (e) => {res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e)});
+        }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message}))
+
+    }
+
+    // user wants to remove like
+    if (!liked) {
+        // find blog
+        listById(req.params?.id).then(blog => {
+            if (!blog) 
+                return res.status(httpStatus.NOT_FOUND).send({message: "Blog not found"});
+
+            // user should liked this blog before
+            const isUserLikedThisBlogBefore = blog.likedByUsers.find( (elem) => elem.user_id?.toString() === _id)
+            if (!isUserLikedThisBlogBefore)
+                res.status(httpStatus.OK).send({message: "Current user has did not liked this blog"});
+        
+            // remove current user from array then save and update doc
+            blog.likedByUsers = blog.likedByUsers.filter((elem) => elem.user_id?.toString() !== _id)
+
+            blog.save().then( (updatedDoc) => {
+                // decrement num of likes
+                decrementLike(updatedDoc._id).then(updatedBlog => {
+                    res.status(httpStatus.OK).send(updatedBlog);
+                }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(
+                {error: e.message}
+            ))
+            }).catch( (e) => {res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e)});
+        }).catch(e => res.status(httpStatus.INTERNAL_SERVER_ERROR).send( {error: e.message}))
+            
+    } 
+
+}
+
 module.exports = {
     index,
     getBlog,
     createBlog,
     updateBlog,
-    deleteBlog
+    deleteBlog,
+    sendLikeFlag
 }

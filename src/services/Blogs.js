@@ -28,10 +28,21 @@ const remove = (id) => {
     return Blog.findByIdAndDelete(id);
 }
 
+const incrementLike = (id) => {
+    return Blog.findByIdAndUpdate(id, { $inc: { numLikes: 1 } }, {new: true});
+}
+
+const decrementLike = (id) => {
+    return Blog.findByIdAndUpdate(id, { $inc: { numLikes: -1 } }, {new: true});
+}
+
+
 module.exports = {
     insert,
     list,
     listById,
     modify,
-    remove
+    remove,
+    incrementLike,
+    decrementLike
 }

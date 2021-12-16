@@ -9,6 +9,16 @@ const BlogSchema = new Mongoose.Schema({
         type: Mongoose.Types.ObjectId,
         ref: "user"
     },
+    numLikes: Number,
+    // published: Boolean,
+    likedByUsers: [
+        {
+            user_id: {
+                type: Mongoose.Types.ObjectId,
+                ref: "user"
+            }    
+        }
+    ]
 }, 
 {
     timestamps: true, versionKey: false
