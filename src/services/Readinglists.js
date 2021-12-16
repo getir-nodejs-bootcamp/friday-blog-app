@@ -14,6 +14,12 @@ const listById = (id) => {
     })*/
 }
 
+// fetches reading list where specified blog ID exists
+const listReadingListsByBlogId = (blogID) => {
+    const query = { "blogs": { $elemMatch: {blog_id: blogID} } }
+    return Readinglist.find( query )
+}
+
 const insert = (doc) => {
     const blog = new Readinglist(doc);
     return blog.save();
@@ -27,18 +33,17 @@ const remove = (id) => {
     return Readinglist.findByIdAndDelete(id);
 }
 
-const addBlog = (id) => {
-    return Readinglist.findByIdAndDelete(id);
+const removeReadingListsForUser = (userId) => {
+    return Readinglist.deleteMany({user_id: userId})
 }
 
-const removeBlog = (id) => {
-    return Readinglist.findByIdAndDelete(id);
-}
 
 module.exports = {
     insert,
     list,
     listById,
+    listReadingListsByBlogId,
     modify,
     remove,
+    removeReadingListsForUser
 }
