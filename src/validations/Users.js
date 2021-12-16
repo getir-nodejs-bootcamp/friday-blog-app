@@ -26,7 +26,8 @@ const updateValidation = Joi.object({
     preferences: Joi.object().keys({
         sendMail: Joi.boolean(),
         sendSMS: Joi.boolean()
-    })
+    }),
+    preferredHashtags: Joi.array()
 });
 
 module.exports = {
