@@ -21,8 +21,6 @@ const changePasswordValidation = Joi.object({
 });
 
 const updateValidation = Joi.object({
-    full_name: Joi.string().min(3),
-    email: Joi.string().email().min(8),
     preferences: Joi.object().keys({
         sendMail: Joi.boolean(),
         sendSMS: Joi.boolean()
