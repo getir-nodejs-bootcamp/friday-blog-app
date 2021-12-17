@@ -66,7 +66,7 @@ yarn dev or yarn start
 | GET /blogs                         | Returns all blogs documents                                                                              |                         | not required   |
 | GET /blogs/popular-blogs           | Returns most liked and published top ten blogs                                                           |                         | not required   |
 | GET /blogs/popular-blogs/:category | Returns most liked and published top five blogs by filter category                                       |                         | not required   |
-| GET /blogs/search-by-keywords      | Returns blogs that contains given words in the body                                                      |                         | not required   |
+| GET /blogs/search-by-keywords      | Returns blogs that contains given words in the body                                                      |  `{keywords: "coffee newyork programming"}`                       | not required   |
 | GET /blogs/recommend-me            | Returns recommended blogs to user by looking users' preferred hashtags and querying these tags for blogs |                         | **required**   |
 | GET /blogs/:id                     | Returns updated user information                                                                         |                         | **required**   |
 | POST /blogs                        | Returns new created blog document                                                                        | `text, title, category` | **required**   |
