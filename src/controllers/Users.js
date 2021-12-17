@@ -43,7 +43,7 @@ const update = (req, res) => {
         })
         .catch((e) => res.status().send({ error: e.message }));
 
-    // TODOS: user full_name degistirince bloglardaki ve commentlerdeki ismi de değişmeli
+    // TODOS: when user full_name changes, authors at blogs and comments should be changed too
 };
 
 const login = (req, res) => {
@@ -77,6 +77,10 @@ const login = (req, res) => {
         .catch((e) => res.status(httpStatus.INTERNAL_SERVER_ERROR).send(e));
 };
 
+const getCurrentUserSessionInfo = (req, res) => {
+    res.status(httpStatus.OK).send(req.userInfo);
+};
+
 const index = (req, res) => {
     list()
         .then((response) => {
@@ -100,8 +104,16 @@ const resetPassword = (req, res) => {
 
             eventEmitter.emit('send_email', {
                 to: updatedUser.email, // list of receivers
-                subject: 'Şifre Sıfırlama', // Subject line
-                html: `<p>Talebiniz üzerine şifre sıfırlanmıştır. <br> yeni şifreniz: ${new_password} </p>`, // html body
+                subject: 'Password Reset Information', // Subject line
+                html:
+                `<h3> Important change in your user data </h3>
+                <p> Your password has been reset. <br> new passoword is: ${new_password} </p>
+                <br>
+                <p> Please do not share with others </p>
+                <br>
+                <p> Best </p>
+                <h3> from Friday Blog </h3>
+                `, // html body
             });
 
             res.status(httpStatus.OK).send({
@@ -219,6 +231,7 @@ module.exports = {
     create,
     update,
     index,
+    getCurrentUserSessionInfo,
     login,
     changePassword,
     deleteUser,

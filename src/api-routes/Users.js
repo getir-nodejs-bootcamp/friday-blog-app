@@ -8,6 +8,7 @@ const {
     create,
     update,
     login,
+    getCurrentUserSessionInfo,
     resetPassword,
     changePassword,
     deleteUser,
@@ -16,6 +17,7 @@ const {
 const router = express.Router();
 
 router.get('/', authenticate, index);
+router.get('/whoami', authenticate, getCurrentUserSessionInfo);
 router.route('/').post(validate(schemas.createValidation), create);
 router
     .route('/')
