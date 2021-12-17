@@ -106,7 +106,7 @@ const resetPassword = (req, res) => {
                 to: updatedUser.email, // list of receivers
                 subject: 'Password Reset Information', // Subject line
                 html: `<h3> Important change in your user data </h3>
-                <p> Your password has been reset. <br> new passoword is: ${new_password} </p>
+                <p> Your password has been reset. <br> new password is: ${new_password} </p>
                 <br>
                 <p> Please do not share with others </p>
                 <br>
