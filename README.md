@@ -71,7 +71,7 @@ yarn dev or yarn start
 | GET /blogs/:id                     | Returns updated user information                                                                         |                         | **required**   |
 | POST /blogs                        | Returns new created blog document                                                                        | `text, title, category` | **required**   |
 | PATCH /blogs/:id                   | Returns updated blog document                                                                            |                         | **required**   |
-| PATCH /blogs/:id/like-flag         | Returns liked like count of blog                                                                         | `{liked: boolean}`      | **required**   |
+| PATCH /blogs/:id/like-flag         | Sends like to blog or revert the like, returns updated document                                          | `{liked: boolean}`      | **required**   |
 | DELETE /blogs/:id                  | Deletes the blog by given id and deletes if comments exists for this blog                                |                         | **required**   |
 
 ## Comments Service
