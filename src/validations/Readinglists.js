@@ -1,12 +1,12 @@
 const Joi = require('joi');
 
 const createValidation = Joi.object({
-    blog_id: Joi.string().required().min(10),
-    text: Joi.string().required().min(1),
+    name: Joi.string().required().min(3),
 });
 
 const updateValidation = Joi.object({
-    text: Joi.string().required().min(1),
+    name: Joi.string().min(3),
+    blogs: Joi.array().items(Joi.object()),
 });
 
 module.exports = {
