@@ -2,7 +2,7 @@
   "name": "friday-blog-app",
   "version": "1.0.0",
   "description": "Backend for a blog application that uses MongoDB, NodeJS and ExpressJS",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js"
