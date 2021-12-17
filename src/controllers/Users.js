@@ -127,6 +127,10 @@ const resetPassword = (req, res) => {
 };
 
 const changePassword = (req, res) => {
+    // this will send with SMS, plain password without hash
+    const new_password = req.body.password;
+
+    // the hashed password will be saved to DB
     req.body.password = passwordToHash(req.body.password);
 
     // get user info from auth middleware
@@ -136,6 +140,13 @@ const changePassword = (req, res) => {
                 return res
                     .status(httpStatus.NOT_FOUND)
                     .send({ error: 'user password has not been changed.' });
+
+            if (req.userInfo.preferences.sendSMS) {
+                eventEmitter.emit('send_sms', {
+                    body: `Your password has been changed successfully. New password is ${new_password}`,
+                    to: `+${req.userInfo.phoneNumber}`,
+                });
+            }
 
             res.status(httpStatus.OK).send(updatedUser);
         })
