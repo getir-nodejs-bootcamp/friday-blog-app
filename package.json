@@ -4,7 +4,8 @@
   "description": "Backend for a blog application that uses MongoDB, NodeJS and ExpressJS",
   "main": "index.js",
   "scripts": {
-    "start": "node src/app.js"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
   },
   "repository": {
     "type": "git",
