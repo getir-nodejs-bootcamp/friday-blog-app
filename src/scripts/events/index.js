@@ -1,5 +1,7 @@
 const eventEmitter = require('./eventEmitter');
 const nodemailer = require('nodemailer');
+const twilio = require('twilio');
+
 module.exports = () => {
     eventEmitter.on('send_email', async (emailData) => {
         let transporter = nodemailer.createTransport({
@@ -23,5 +25,24 @@ module.exports = () => {
                 console.log(err);
             }
         );
+    });
+
+    eventEmitter.on('send_sms', async (smsData) => {
+        const accountSid = process.env.TWILIO_ACCOUNT_SID;
+        const authToken = process.env.TWILIO_AUTH_TOKEN;
+
+        const client = new twilio(accountSid, authToken);
+
+        client.messages
+            .create({
+                ...smsData,
+                from: process.env.TWILIO_SMS_FROM,
+            })
+            .then((message) => {
+                console.log(`message sid: ${message.sid}`);
+                console.log(`body: ${message.body}`);
+                console.log(`errorCode: ${message.errorCode}`);
+                console.log(`errorMessage: ${message.errorMessage}`);
+            });
     });
 };
