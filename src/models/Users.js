@@ -5,6 +5,7 @@ const UserSchema = new Mongoose.Schema(
         full_name: String,
         password: String,
         email: String,
+        phoneNumber: String,
         profile_image: String,
         preferences: {
             sendMail: {
