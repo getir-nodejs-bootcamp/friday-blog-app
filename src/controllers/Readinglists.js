@@ -208,11 +208,12 @@ const removeBlogFromReadingList = (req, res) => {
                             'Current user did not add this blog to playlist before',
                     });
 
-            // create object to add array
+            // filter array, therefore this array does not keep removing blog
             readinglist.blogs = readinglist.blogs.filter(
                 (elem) => elem.blog_id.toString() !== req.params.blogId
             );
-
+        
+            // save to db
             readinglist
                 .save()
                 .then((updatedDoc) => {
