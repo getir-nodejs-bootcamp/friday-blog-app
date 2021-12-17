@@ -110,4 +110,4 @@ yarn dev or yarn start
 
 -   An event is fired when a user resets his/her password.
 
-<img width="600" alt="nodemailer" src="https://user-images.githubusercontent.com/56218812/146561188-52553995-0f7f-4103-9eb8-fa83cf0e56e6.png">
+<img width="596" alt="nodemailer" src="https://user-images.githubusercontent.com/56218812/146563643-502b2132-e509-40de-9b07-c5c38c00a4f7.png">
